@@ -15,3 +15,20 @@ node_modules
 
 #!.yarn/cache
 .pnp.*
+
+/src/generated/prisma
+
+# Build output
+dist
+
+# Environment
+.env
+!.env.example
+
+# IDE
+.idea
+
+# AI assistant skills (installed with `npx skills add prisma/skills`)
+.agents/
+.claude/skills/
+skills-lock.json

@@ -1,0 +1,12 @@
+// Base Prisma schema: only the generator and database connection live here.
+// Models live next to their feature, e.g. src/modules/user/user.prisma.
+// Prisma merges every .prisma file under src/ (see prisma.config.ts).
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
