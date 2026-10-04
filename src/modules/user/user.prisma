@@ -6,11 +6,30 @@
  * Email: mdmehedihasanroni28@gmail.com
  */
 
+enum Role {
+  ADMIN
+  LIBRARIAN
+  MEMBER
+}
+
 model User {
-  id       String @id @default(uuid())
-  email    String @unique
-  name     String
+  id       Int     @id @default(autoincrement())
+  email    String  @unique @db.VarChar(255)
+  name     String  @db.VarChar(100)
   password String
+  active   Boolean @default(false)
+  role     Role    @default(MEMBER)
+
+  createdAt BigInt @default(dbgenerated("((EXTRACT(epoch FROM now()) * (1000)::numeric))::bigint"))
+  updatedAt BigInt @default(dbgenerated("((EXTRACT(epoch FROM now()) * (1000)::numeric))::bigint"))
+
+  createdById Int?
+  updatedById Int?
+  createdBy   User? @relation("UserCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  updatedBy   User? @relation("UserUpdatedBy", fields: [updatedById], references: [id], onDelete: SetNull)
+
+  createdUsers User[] @relation("UserCreatedBy")
+  updatedUsers User[] @relation("UserUpdatedBy")
 
   @@map("users")
 }

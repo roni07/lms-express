@@ -33,23 +33,23 @@ export const notFound: RequestHandler = (req, _res, next) => {
 
 export const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
   if (err instanceof ZodError) {
-    res.status(400).json({ success: false, message: "Validation failed", errors: err.issues });
+    res.status(400).json({ message: "Validation failed", errors: err.issues });
     return;
   }
 
   if (err instanceof HttpError) {
-    res.status(err.statusCode).json({ success: false, message: err.message });
+    res.status(err.statusCode).json({ message: err.message });
     return;
   }
 
   // Client errors raised by Express/body-parser (malformed JSON, payload too large, ...)
   if (isExposedClientError(err)) {
     const message = err.type === "entity.parse.failed" ? "Malformed JSON in request body" : err.message;
-    res.status(err.status).json({ success: false, message });
+    res.status(err.status).json({ message });
     return;
   }
 
   // Hand the error to pino-http so it's logged (with stack) on the request's own log line
   res.err = err instanceof Error ? err : new Error(String(err));
-  res.status(500).json({ success: false, message: "Internal server error" });
+  res.status(500).json({ message: "Internal server error" });
 };
